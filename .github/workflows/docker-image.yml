@@ -31,7 +31,9 @@ jobs:
             mvn clean install
 
       - name: OWASP Dependency Check
-        run: mvn org.owasp:dependency-check-maven:check
+        run: |
+          cd my-java-app
+          mvn org.owasp:dependency-check-maven:check
 
       - name: Build Docker Image
         run: docker build -t myrepo/my-java-app:${{ github.sha }} .
