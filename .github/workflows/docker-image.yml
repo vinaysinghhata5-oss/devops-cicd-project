@@ -21,11 +21,13 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        run: mvn clean install
+        run: 
+          cd my-java-app
+          mvn clean install
 
       - name: Run Tests
         run: |
-            cd java-app
+            cd my-java-app
             mvn clean install
 
       - name: OWASP Dependency Check
