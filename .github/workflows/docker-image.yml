@@ -1,15 +1,17 @@
-name: Java CI/CD with Security Scans
+name: Java CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up JDK
@@ -19,21 +21,22 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        run: mvn clean install -DskipTests=false
+        run: mvn clean install
 
-      - name: Run OWASP Dependency Check
+      - name: Run Tests
+        run: |
+            cd java-app
+            mvn clean install
+
+      - name: OWASP Dependency Check
         run: mvn org.owasp:dependency-check-maven:check
 
       - name: Build Docker Image
-        run: docker build -t myrepo/myapp:${{ github.sha }} .
+        run: docker build -t myrepo/my-java-app:${{ github.sha }} .
 
       - name: Scan Docker Image with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'myrepo/myapp:${{ github.sha }}'
+          image-ref: 'myrepo/my-java-app:${{ github.sha }}'
           severity: 'CRITICAL,HIGH'
 
-      - name: Push Docker Image
-        run: |
-          echo ${{ secrets.DOCKER_PASS }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
-          docker push myrepo/myapp:${{ github.sha }}
