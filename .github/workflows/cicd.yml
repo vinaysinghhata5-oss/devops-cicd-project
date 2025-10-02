@@ -72,7 +72,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build Project
-      run: 
+      run: |
         cd my-java-app
         mvn package
     - name: Upload JAR artifact
