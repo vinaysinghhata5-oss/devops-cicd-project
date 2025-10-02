@@ -79,7 +79,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: app-jar
-        path: target/*.jar 
+        path: my-java-app/target/*.jar 
         
     - uses: actions/checkout@v4
       with:
