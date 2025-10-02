@@ -57,7 +57,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Unit Test Cases
-      run: 
+      run: |
         cd my-java-app
         mvn test
   build_project_and_sonar_scan:
